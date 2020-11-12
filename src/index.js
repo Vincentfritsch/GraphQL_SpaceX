@@ -3,6 +3,31 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'https://api.spacex.land/graphql/',
+  cache: new InMemoryCache()
+});
+
+client
+  .query({
+    query: gql`
+      query GetLaunches {
+        launches(limit: 5) {
+          launch_date_utc
+          launch_success
+          rocket {
+            rocket_name
+          }
+          links {
+            video_link
+          }
+          details
+        }
+      }`
+  })
+  .then(result => console.log(result));
 
 ReactDOM.render(
   <React.StrictMode>
